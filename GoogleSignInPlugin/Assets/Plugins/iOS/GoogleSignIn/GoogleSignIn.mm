@@ -183,12 +183,9 @@ bool GoogleSignIn_Configure(void *unused, bool useGameSignIn,
                             const char **additionalScopes, int scopeCount,
                             const char *accountName) {
     
-    NSString *urlScheme = @"com.googleusercontent.apps.1069303717788-fv39c9ojihri3ftse3fpq6p7cjjd2dr9";
+    //HOT-FIX: the webClientId coming from Unity, but it is not the server ID, is indeed the clientID, there is no time to change the name now.
     GIDConfiguration* config = [[GIDConfiguration alloc]
-                                initWithClientID:[NSString stringWithUTF8String:webClientId]
-                                serverClientID:nil
-                                hostedDomain:urlScheme
-                                openIDRealm:nil];
+                                initWithClientID:[NSString stringWithUTF8String:webClientId]];
     
     [GoogleSignInHandler sharedInstance]->signInConfiguration = config;
     
