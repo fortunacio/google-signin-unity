@@ -182,15 +182,16 @@ bool GoogleSignIn_Configure(void *unused, bool useGameSignIn,
                             bool requestIdToken, bool hidePopups,
                             const char **additionalScopes, int scopeCount,
                             const char *accountName) {
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"GoogleService-Info" ofType:@"plist"];
-    NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:path];
-    NSString *clientId = [dict objectForKey:@"CLIENT_ID"];
-    GIDConfiguration* config = [[GIDConfiguration alloc] initWithClientID:clientId];
-    if (webClientId) {
-      config = [[GIDConfiguration alloc] initWithClientID:clientId serverClientID:[NSString stringWithUTF8String:webClientId]];
-    }
+    
+    NSString *urlScheme = @"com.googleusercontent.apps.1069303717788-fv39c9ojihri3ftse3fpq6p7cjjd2dr9";
+    GIDConfiguration* config = [[GIDConfiguration alloc]
+                                initWithClientID:[NSString stringWithUTF8String:webClientId]
+                                serverClientID:nil
+                                hostedDomain:urlScheme
+                                openIDRealm:nil];
+    
     [GoogleSignInHandler sharedInstance]->signInConfiguration = config;
-
+    
     int scopeSize = scopeCount;
     if (scopeSize) {
         NSMutableArray *tmpary = [[NSMutableArray alloc] initWithCapacity:scopeSize];
@@ -203,7 +204,7 @@ bool GoogleSignIn_Configure(void *unused, bool useGameSignIn,
     if (accountName) {
       [GoogleSignInHandler sharedInstance]->loginHint = [NSString stringWithUTF8String:accountName];
     }
-
+    
     return !useGameSignIn;
 }
 
